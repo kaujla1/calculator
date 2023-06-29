@@ -24,8 +24,8 @@ function power(num1, num2) {
   return num1 ** num2;
 }
 
-let prev = [];
-let prevLast; //might need to empty this on clear? Value is typeof string btw
+let prev = []; //types are number1, number2, op, equals
+let prevLast; //might need to empty this on clear? Value is typeof string btw. Maybe change to prevLastType???
 let number1 = ""; //these might need to be arrays or objects?
 let number2 = ""; //instead of making these 0 to begin, just use +number1/2 when passing them to operate 
 let operator = ""; 
@@ -33,19 +33,19 @@ let operator = "";
 function operate(num1, num2, op) {
   switch (op) {
     case "+":
-      return add(num1, num2);
+      return add(+num1, +num2);
       break;
     case "-":
-      return subtract(num1, num2);
-      breakl
+      return subtract(+num1, +num2);
+      break;
     case "*":
-      return multiply(num1, num2);
+      return multiply(+num1, +num2);
       break;
     case "/":
-      return divide(num1, num2);
+      return divide(+num1, +num2);
       break;
-    case "**":
-      return power(num1, num2);
+    case "^":
+      return power(+num1, +num2);
       break;
   };
 }
@@ -54,69 +54,121 @@ function operate(num1, num2, op) {
 
 const screenContainer = document.querySelector(".screen-container");
 
+const upperScreenContainer = document.querySelector(".upper-screen-container");
+const lowerScreenContainer = document.querySelector(".lower-screen-container");
+
 const buttons = document.querySelectorAll(".button-container button");
 
 const upperScreen = document.createElement("div");
+upperScreen.classList.add(".upper");
 const lowerScreen = document.createElement("div");
+lowerScreen.classList.add(".lower");
 
-screenContainer.appendChild(upperScreen);
-screenContainer.appendChild(lowerScreen);
+upperScreenContainer.appendChild(upperScreen);
+lowerScreenContainer.appendChild(lowerScreen);
+
+
+let operators = ["^", "/", "*", "-", "+"];
+let numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
+
+function setPrev() {
+  if (prev.length === 0) {
+    "";
+  } else {
+    prevLast = prev[prev.length -1].type; //gets most updated previous choice's type
+  };
+}
+
+function clearAll() {
+  prev = [];
+  number1 = "";
+  number2 = "";
+  operator = "";
+  lowerScreen.textContent = "";
+  upperScreen.textContent = "";
+}
 
 function displayValue(chosen) {
-  prevLast = prev[prev.length -1].type;
+  setPrev();
+  
   if (chosen === "Clear") {
-    prev = [];
-    number1 = "";
-    number2 = "";
-    operator = "";
-  } else if (chosen is delete) {
-    if (clicked is empty) {
-
-    } else if () {
-
-    } else if () {
-      
-    } else if () {
-      
-    } else if () {
-      
-    }
-  } else if (chosen is equals) {
-    if ( || ) {
-
-    } else if () {
-      
-    } else if () {
-      
-    } else if () {
-      
-    }
-  } else if (chosen is op) {
-    if ( || ) {
-
-    } else if () {
-      
-    } else if () {
-      
-    } else if () {
-      
-    }
-  } else if (chosen is num) {
-    
+    clearAll();
+  } else if (chosen === "Del") {
     if (prev.length === 0) {
-      number1 = num;
+      ""; //should do nothing?
+    } else if (prevLast === "number1") {
+      number1 = number1.substring(0, (number1.length - 1));// put in a helper function?
+      lowerScreen.textContent.substring(0, (lowerScreen.textContent.length - 1));
+      prev.pop();
+    } else if (prevLast === "op") {
+      upperScreen.textContent = "";
       lowerScreen.textContent = number1;
-      prev.push({choice: num, type: "number1"}); //redo
-    } else if (prevLast.type === "number1") {
-      
-    } else if () {
-      
-    } else if () {
-      
-    } else if () {
-      
+      operator = "";
+      prev.pop();
+    } else if (prevLast === "number2") {
+      number2 = number2.substring(0, (number2.length - 1));// put in a helper function?
+      lowerScreen.textContent.substring(0, (lowerScreen.textContent.length - 1));
+      prev.pop();
+    } else if (prevLast === "equals") {
+      upperScreen.textContent = "";
+      lowerScreen.textContent.substring(0, (lowerScreen.textContent.length - 1));
+      prev.splice(-2, 2);
     }
+  } else if (chosen === "=") {
+    if (prev.length === 0 || prevLast === "op") {
+      lowerScreen.textContent = "Error";
+    } else if (prevLast === "number1") {
+      upperScreen.textContent = `${number1} =`;
+      lowerScreen.textContent = number1;
+      prev.push({choice: chosen, type: "equals"}); //redo
+    } else if (prevLast === "number2") {
+      upperScreen.textContent = `${number1} ${operator} ${number2} =`;
+      number1 = operate(number1, number2, operator);
+      lowerScreen.textContent = number1;
+      number2 = "";
+      operator = "";
+      //clear clicked and add new num1 & operator  
+    } else if (prevLast === "equals") {
+      "";//should do nothing
+    }
+  } else if (operators.includes(chosen)) {
+    if (prev.length === 0 || prevLast === "op") {
+      lowerScreen.textContent = "Error";
+    } else if (prevLast === "number1" || prevLast === "equals") { //not sure if merging these will work
+      operator = chosen;
+      lowerScreen.textContent = "";
+      upperScreen.textContent = `${number1} ${operator}`;
+      prev.push({choice: chosen, type: "op"}); //redo
+    } else if (prevLast === "number2") {
+      number1 = operate(number1, number2, operator); 
+      lowerScreen.textContent = "";
+      upperScreen.textContent = `${number1} ${operator}`;
+      //clear clicked and add new num1 & operator      
+    } 
+  } else if (numbers.includes(chosen)) {
+    if (prev.length === 0) {
+      number1 = chosen;
+      lowerScreen.textContent = number1;
+      prev.push({choice: chosen, type: "number1"}); //redo
+    } else if (prevLast === "number1" || prevLast === "equals") { //not sure if merging these will work
+      number1 = number1 + chosen; 
+      lowerScreen.textContent = number1;
+      prev.push({choice: chosen, type: "number1"}); //redo
+    } else if (prevLast === "op") {
+      number2 = chosen;
+      lowerScreen.textContent = number2;
+      prev.push({choice: chosen, type: "number2"}); //redo
+    } else if (prevLast === "number2") {
+      number2 = number2 + chosen;
+      lowerScreen.textContent = number2;
+      prev.push({choice: chosen, type: "number2"});
+    } 
   };
+}
+
+
+function addToPrev(...choice) {
+
 }
 
 let clicked; 
