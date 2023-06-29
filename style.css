@@ -1,1 +1,25 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.calculator-container {
+  padding: 0;
+  margin: 0;
+}
+
+.screen-container {
+  height: 50px;
+  border: 1px;
+  border-style: solid;
+}
+
+.upper-screen-container,
+.lower-screen-container {
+  height: 20px;
+}
