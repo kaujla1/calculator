@@ -51,9 +51,6 @@ function operate(num1, num2, op) {
 }
 
 //Create the functions that populate the display when you click the number buttons. You should be storing the ‘display value’ in a variable somewhere for use in the next step.
-
-const screenContainer = document.querySelector(".screen-container");
-
 const upperScreenContainer = document.querySelector(".upper-screen-container");
 const lowerScreenContainer = document.querySelector(".lower-screen-container");
 
@@ -127,9 +124,10 @@ function displayValue(chosen) {
       lowerScreen.textContent = number1;
       number2 = "";
       operator = "";
-      //clear clicked and add new num1 & operator  
+      prev = []; //not sure if this is redundant, consider removing
+      addManyToPrev(number1, chosen)  
     } else if (prevLast === "equals") {
-      "";//should do nothing
+      "";
     }
   } else if (operators.includes(chosen)) {
     if (prev.length === 0 || prevLast === "op") {
@@ -141,9 +139,11 @@ function displayValue(chosen) {
       prev.push({choice: chosen, type: "op"}); //redo
     } else if (prevLast === "number2") {
       number1 = operate(number1, number2, operator); 
+      operator = chosen;
       lowerScreen.textContent = "";
       upperScreen.textContent = `${number1} ${operator}`;
-      //clear clicked and add new num1 & operator      
+      prev = []; //this might be redundant, consider removing
+      addManyToPrev(number1, chosen);     
     } 
   } else if (numbers.includes(chosen)) {
     if (prev.length === 0) {
@@ -166,9 +166,21 @@ function displayValue(chosen) {
   };
 }
 
-
-function addToPrev(...choice) {
-
+function addManyToPrev(num, op) {
+  let lastLetter;
+  if (op === "=") {
+    for (let i = 0; i < num.length; i++) {
+      lastLetter = number1.slice(i, i+1);
+      prev.push({choice: lastLetter, type: "number1"});
+    }
+    prev.push({choice: op, type: "equals"});
+  } else {
+    for (let i = 0; i < num.length; i++) {
+      lastLetter = number1.slice(i, i+1);
+      prev.push({choice: lastLetter, type: "number1"});
+    }
+    prev.push({choice: op, type: "op"});
+  }
 }
 
 let clicked; 
