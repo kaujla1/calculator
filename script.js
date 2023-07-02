@@ -101,7 +101,7 @@ function clearAll() {
 
 function validateDelete() {
   if (number1.length === 0) {
-    ""; //should do nothing?
+    ""; 
   } else if (prevType === "number1" || prevType === "period1") {
     // number1 = number1.substring(0, (number1.length - 1));
     // lowerScreen.textContent = number1;
@@ -134,17 +134,17 @@ function deleteLetter(number) {
     number2 = number2.substring(0, (number2.length - 1));
     lowerScreen.textContent = number2;
   }
-
 }
 
 function validateEquals(chosen) {
   if (number1.length === 0 || prevType === "op") {
     lowerScreen.textContent = "Error";
-  } else if (prevType === "number1") {
+  } else if (prevType === "number1" || prevType === "period1") {
     upperScreen.textContent = `${number1} =`;
     lowerScreen.textContent = number1;
-    prev.push({choice: chosen, type: "equals"}); //redo
-  } else if (prevType === "number2") {
+    addToPrev(chosen, "equals")
+    //prev.push({choice: chosen, type: "equals"}); //redo
+  } else if (prevType === "number2" || prevType === "period2") {
     upperScreen.textContent = `${number1} ${operator} ${number2} =`;
     number1 = operate(number1, number2, operator).toString();
     lowerScreen.textContent = number1;
@@ -160,11 +160,12 @@ function validateEquals(chosen) {
 function validateOperator(chosen) {
   if (number1.length === 0 || prevType === "op") {
     lowerScreen.textContent = "Error";
-  } else if (prevType === "number1" || prevType === "equals") { 
+  } else if (prevType === "number1" || prevType === "period1" || prevType === "equals") { 
     operator = chosen;
     lowerScreen.textContent = "";
     upperScreen.textContent = `${number1} ${operator}`;
-    prev.push({choice: chosen, type: "op"}); //redo
+    addToPrev(chosen, "op");
+    //prev.push({choice: chosen, type: "op"}); //redo
   } else if (prevType === "number2") {
     number1 = operate(number1, number2, operator).toString(); 
     operator = chosen;
@@ -176,25 +177,31 @@ function validateOperator(chosen) {
   } 
 }
 
-function validatePeriod(chosen) {//add case for decimal before operator (currently does nothing) (e.g., 1. then op, does nothing)
+function validatePeriod(chosen) {
   if (number1.length === 0) {
     number1 = "0.";
     lowerScreen.textContent = number1;
-    prev.push({choice: "0", type: "number1"});
-    prev.push({choice: chosen, type: "period1"});
+    addToPrev("0", "number1");
+    addToPrev(chosen, "period1");
+    //prev.push({choice: "0", type: "number1"});
+    //prev.push({choice: chosen, type: "period1"});
   } else if (prevType === "number1" && !number1.includes(".")) {
     number1 = number1 + chosen; 
     lowerScreen.textContent = number1;
-    prev.push({choice: chosen, type: "period1"});
+    //prev.push({choice: chosen, type: "period1"});
+    addToPrev(chosen, "period1")
   } else if (prevType === "op") {
     number2 = "0.";
     lowerScreen.textContent = number2;
-    prev.push({choice: "0", type: "number2"});
-    prev.push({choice: chosen, type: "period2"});
+    addToPrev("0", "number2");
+    addToPrev(chosen, "period2");
+    //prev.push({choice: "0", type: "number2"});
+    //prev.push({choice: chosen, type: "period2"});
   } else if (prevType === "number2" && !number2.includes(".")) {
     number2 = number2 + chosen;
     lowerScreen.textContent = number2;
-    prev.push({choice: chosen, type: "period2"});
+    //prev.push({choice: chosen, type: "period2"});
+    addToPrev(chosen, "period2")
   }
 }
 
@@ -220,7 +227,7 @@ function validateNumber(chosen) {
     number2 = number2 + chosen;
     lowerScreen.textContent = number2;
     addToPrev(chosen, "number2");
-    // prev.push({choice: chosen, type: "number2"});
+    // prev.push({choice: chosen, type: "number2"}); //redo
   } 
 }
 
@@ -254,17 +261,3 @@ buttons.forEach((button) => {
     validateChoice(clicked);
   });
 });
-
-
-//console tests: 
-
-/*let prev = [];
-let prevType;
-
-function test(num1, num2) {
-prevType = prev[prev.length - 1].type;
-console.log(prevType);
-return num1+num2;
-}
-
-prev = [{choice: "1", type: "number1"}, {choice: "+", type: "op"}, {choice: "2", type: "number2"}];*/
