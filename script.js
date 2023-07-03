@@ -103,8 +103,6 @@ function validateDelete() {
   if (number1.length === 0) {
     ""; 
   } else if (prevType === "number1" || prevType === "period1") {
-    // number1 = number1.substring(0, (number1.length - 1));
-    // lowerScreen.textContent = number1;
     deleteLetter(number1);
     prev.pop(); //add to helper
   } else if (prevType === "op") {
@@ -113,14 +111,10 @@ function validateDelete() {
     operator = "";
     prev.pop(); //add to helper
   } else if (prevType === "number2" || prevType === "period2") {
-    // number2 = number2.substring(0, (number2.length - 1));
-    // lowerScreen.textContent = number2;
     deleteLetter(number2);
     prev.pop();
   } else if (prevType === "equals") {
     upperScreen.textContent = "";
-    // number1 = number1.substring(0, (number1.length - 1));
-    // lowerScreen.textContent = number1;
     deleteLetter(number1);
     prev.splice(-2, 2); //add to helper
   }
@@ -143,7 +137,6 @@ function validateEquals(chosen) {
     upperScreen.textContent = `${number1} =`;
     lowerScreen.textContent = number1;
     addToPrev(chosen, "equals")
-    //prev.push({choice: chosen, type: "equals"}); //redo
   } else if (prevType === "number2" || prevType === "period2") {
     upperScreen.textContent = `${number1} ${operator} ${number2} =`;
     number1 = operate(number1, number2, operator).toString();
@@ -165,7 +158,6 @@ function validateOperator(chosen) {
     lowerScreen.textContent = "";
     upperScreen.textContent = `${number1} ${operator}`;
     addToPrev(chosen, "op");
-    //prev.push({choice: chosen, type: "op"}); //redo
   } else if (prevType === "number2") {
     number1 = operate(number1, number2, operator).toString(); 
     operator = chosen;
@@ -183,51 +175,49 @@ function validatePeriod(chosen) {
     lowerScreen.textContent = number1;
     addToPrev("0", "number1");
     addToPrev(chosen, "period1");
-    //prev.push({choice: "0", type: "number1"});
-    //prev.push({choice: chosen, type: "period1"});
   } else if (prevType === "number1" && !number1.includes(".")) {
     number1 = number1 + chosen; 
     lowerScreen.textContent = number1;
-    //prev.push({choice: chosen, type: "period1"});
     addToPrev(chosen, "period1")
   } else if (prevType === "op") {
     number2 = "0.";
     lowerScreen.textContent = number2;
     addToPrev("0", "number2");
     addToPrev(chosen, "period2");
-    //prev.push({choice: "0", type: "number2"});
-    //prev.push({choice: chosen, type: "period2"});
   } else if (prevType === "number2" && !number2.includes(".")) {
     number2 = number2 + chosen;
     lowerScreen.textContent = number2;
-    //prev.push({choice: chosen, type: "period2"});
     addToPrev(chosen, "period2")
   }
 }
 
-function validateNumber(chosen) {
+function validateNumber(chosen) {//add conditions for num1 and num2 so zeros cannot be the first digits of either number
   if (number1.length === 0) {
-    number1 = chosen;
-    lowerScreen.textContent = number1;
-    addToPrev(chosen, "number1");
-    // prev.push({choice: chosen, type: "number1"}); //redo
+    if (chosen === "0") {
+      lowerScreen.textContent = "0";
+    } else {
+      number1 = chosen;
+      lowerScreen.textContent = number1;
+      addToPrev(chosen, "number1");
+    }
   } else if (prevType === "number1" || prevType === "equals" || prevType === "period1") { 
     number1 = number1 + chosen; 
     lowerScreen.textContent = number1;
     addToPrev(chosen, "number1");
-    // prev.push({choice: chosen, type: "number1"}); //redo
   } else if (chosen === "0" && prevChoice === "/") {
     lowerScreen.textContent = "Cannot divide by zero";
   } else if (prevType === "op") {
-    number2 = chosen;
-    lowerScreen.textContent = number2;
-    addToPrev(chosen, "number2");
-    // prev.push({choice: chosen, type: "number2"}); //redo
+    if (chosen === "0") {
+      lowerScreen.textContent = "0";
+    } else {
+      number2 = chosen;
+      lowerScreen.textContent = number2;
+      addToPrev(chosen, "number2");
+    }
   } else if (prevType === "number2" || prevType === "period2") {
     number2 = number2 + chosen;
     lowerScreen.textContent = number2;
     addToPrev(chosen, "number2");
-    // prev.push({choice: chosen, type: "number2"}); //redo
   } 
 }
 
