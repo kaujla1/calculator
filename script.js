@@ -29,21 +29,29 @@ let operator = "";
 function operate(num1, num2, op) {
   switch (op) {
     case "+":
-      return add(+num1, +num2);
+      return checkRounding(add(+num1, +num2));
       break;
     case "-":
-      return subtract(+num1, +num2);
+      return checkRounding(subtract(+num1, +num2));
       break;
     case "x":
-      return multiply(+num1, +num2);
+      return checkRounding(multiply(+num1, +num2));
       break;
     case "/":
-      return divide(+num1, +num2);
+      return checkRounding(divide(+num1, +num2));
       break;
     case "^":
-      return power(+num1, +num2);
+      return checkRounding(power(+num1, +num2));
       break;
   };
+}
+
+function checkRounding(num) {
+  if (num.toString().includes(".")) {
+    return Math.round((num + Number.EPSILON) * 100) / 100;
+  } else {
+    return num;
+  }
 }
 
 //Connect to and create calculator screen
@@ -53,9 +61,11 @@ const lowerScreenContainer = document.querySelector(".lower-screen-container");
 const buttons = document.querySelectorAll(".button-container button");
 
 const upperScreen = document.createElement("div");
-upperScreen.classList.add(".upper");
+upperScreen.classList.add("upper");
+
 const lowerScreen = document.createElement("div");
-lowerScreen.classList.add(".lower");
+lowerScreen.classList.add("lower");
+
 
 upperScreenContainer.appendChild(upperScreen);
 lowerScreenContainer.appendChild(lowerScreen);
