@@ -114,19 +114,19 @@ function validateDelete() {
     ""; 
   } else if (prevType === "number1" || prevType === "period1") {
     deleteLetter(number1);
-    prev.pop(); //add to helper
+    prev.pop(); 
   } else if (prevType === "op") {
     upperScreen.textContent = "";
     lowerScreen.textContent = number1;
     operator = "";
-    prev.pop(); //add to helper
+    prev.pop(); 
   } else if (prevType === "number2" || prevType === "period2") {
     deleteLetter(number2);
     prev.pop();
   } else if (prevType === "equals") {
     upperScreen.textContent = "";
     deleteLetter(number1);
-    prev.splice(-2, 2); //add to helper
+    prev.splice(-2, 2); 
   }
 }
 
@@ -201,7 +201,7 @@ function validatePeriod(chosen) {
   }
 }
 
-function validateNumber(chosen) {//add conditions for num1 and num2 so zeros cannot be the first digits of either number
+function validateNumber(chosen) {
   if (number1.length === 0) {
     if (chosen === "0") {
       lowerScreen.textContent = "0";
@@ -252,7 +252,7 @@ function addManyToPrev(num, op) {
   } //add case here for decimals? 
 }
 
-//Connect calculator operation to calculator buttons
+//Connect calculator buttons to operations on click
 let clicked; 
 
 buttons.forEach((button) => {
@@ -261,3 +261,24 @@ buttons.forEach((button) => {
     validateChoice(clicked);
   });
 });
+
+//Connect calculator buttons to operations on key
+window.addEventListener("keydown", (event) => {
+  if (numbers.includes(event.key) || operators.includes(event.key) || event.key === ".") {
+    clicked = event.key;
+    validateChoice(clicked);
+  } else if (event.key === "Escape") {
+    clicked = "C";
+    validateChoice(clicked);
+  } else if (event.key === "Backspace") {
+    clicked = "Del";
+    validateChoice(clicked);
+  } else if (event.key === "Enter" || event.key === "=") {
+    clicked = "=";
+    validateChoice(clicked);
+  } else if (event.key === "*") {
+    clicked = "x";
+    validateChoice(clicked);
+  }
+});
+
