@@ -80,14 +80,29 @@ body {
   background-color: rgb(99, 99, 99);
 }
 
+.num:hover,
+.period:hover {
+  background-color: rgb(126, 124, 124);
+}
+
 .clear,
 .del {
   background-color: rgb(234, 12, 12);
 }
 
+.clear:hover, 
+.del:hover {
+  background-color: rgb(231, 84, 84);
+}
+
 .op, 
 .equals {
   background-color: orange;
+}
+
+.op:hover,
+.equals:hover {
+  background-color: rgb(255, 195, 84);
 }
 
 .zero,
@@ -108,3 +123,4 @@ button {
   border-style: solid;
   border-radius: 12px;
 }
+
