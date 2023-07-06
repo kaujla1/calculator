@@ -13,7 +13,7 @@ body {
   height: 45vh;
   width: 10vw;
   background-color: black;
-  padding: 25px;
+  padding: 20px;
   margin: 0;
   border: 3px;
   border-radius: 12px;
@@ -27,8 +27,8 @@ body {
 .screen-container {
   color: white;
   text-align: right;
-  height: 15vh;
   margin-bottom: 2px;
+  flex: 0.5;
 }
 
 .upper-screen-container,
@@ -85,6 +85,11 @@ body {
   background-color: rgb(126, 124, 124);
 }
 
+.num:active,
+.period:active {
+  background-color: rgb(75, 75, 75);
+}
+
 .clear,
 .del {
   background-color: rgb(234, 12, 12);
@@ -95,14 +100,24 @@ body {
   background-color: rgb(231, 84, 84);
 }
 
+.clear:active, 
+.del:active {
+  background-color: rgb(194, 2, 2);
+}
+
 .op, 
-.equals {
+.equals { 
   background-color: orange;
 }
 
 .op:hover,
 .equals:hover {
   background-color: rgb(255, 195, 84);
+}
+
+.op:active, 
+.equals:active {
+  background-color: rgb(214, 140, 2);
 }
 
 .zero,
