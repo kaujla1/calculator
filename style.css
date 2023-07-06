@@ -126,7 +126,7 @@ body {
 }
 
 .equals {
-  flex: 2;
+  min-width: 50%;
 }
 
 button {
@@ -137,5 +137,6 @@ button {
   border-color: transparent;
   border-style: solid;
   border-radius: 12px;
+  outline: none;
 }
 
